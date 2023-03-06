@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+<!-- I Kendra Ouellet 000399221 certify that this material is my original work. No other person's work has been used without due acknowledgement. I have not made my work available to anyone else. -->
+<head>
+  <title>ReactJS Conditional Rendering</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <style>
+  .myclass {
+    color: red;
+  }
+  </style>
+</head>
+
+<body>
+
+  <h1 class="text-center">Basic ReactJS Dice Game</h1>
+  <div class="dice_label">
+    <div id="dice_game">
+      <DiceGame />
+    </div>
+    
+    <div class="dice"></div>
+  </div>
+
+  <script type="text/babel">
+    //A compenent that renders a single dice
+ function Dice({ num }) {
+  return (
+    <div>
+      {num}
+    </div>
+  );
+}
+//A component that renders the entire dice game
+function DiceGame() {
+   // State variables for the number of dice, number of sides on each dice, and the array of dice values
+  const [nums, setNums] = React.useState(Array(1).fill(1));
+  const [numSides, setNumSides] = React.useState(6);
+  const [numDices, setNumBoxes] = React.useState(1);
+
+  // Function to roll the dice and update the array of dice values
+  const rollDice = () => {
+    setNums(nums.map(() => Math.floor(Math.random() * numSides) + 1));
+  };
+
+  // Function to increase the number of dice and update the array of dice values
+  const incrementNumDice = () => {
+    if (numDices < 3) {
+      setNumBoxes(numDices + 1);
+      setNums(nums.concat([1]));
+    }
+  };
+
+  // Function to increase the number of sides on each dice and reset the array of dice values
+  const incrementNumSides = () => {
+    if (numSides < 20) {
+      setNumSides(numSides + 1);
+      setNums(Array(numDices).fill(1));
+    }
+  };
+
+  // Function to decrease the number of sides on each dice and reset the array of dice values
+  const decrementNumSides = () => {
+    if (numSides > 1) {
+      setNumSides(numSides - 1);
+      setNums(Array(numDices).fill(1));
+    }
+  };
+
+     // Function to reset the game to its initial state
+  const resetGame = () => {
+    setNumBoxes(1);
+    setNumSides(6);
+    setNums(Array(1).fill(1));
+  };
+
+  // Style object for each dice
+  const style = {
+    width: '100px',
+    height: '100px',
+    border: '2px solid black',
+    margin: '0 0 0 1rem',
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    fontSize: '5em',
+    borderRadius: '5%'
+  };
+
+  // Array of dice components, with each dice wrapped in a div with styling
+  const dices = [];
+  for (let i = 0; i < numDices; i++) {
+    dices.push(
+      // <cited>https://www.javatpoint.com/react-keys#:~:text=A%20key%20is%20a%20unique,the%20users%20alter%20the%20lists.<cited>
+      <div key={i} style={style}>
+        <Dice num={nums[i]} />
+      </div>
+    );
+  }
+
+   // The JSX that renders the game, including the buttons to control game state and the array of dice
+  return (
+    <div>
+      {/* Buttons to control the number of sides on each dice */}
+        Number of Sides:{' '}
+        <button class="btn btn-light mx-2" onClick={decrementNumSides} disabled={numSides === 1}>
+          -
+        </button>
+        {numSides}
+        <button class="btn btn-light mx-2" onClick={incrementNumSides} disabled={numSides === 20}>
+          +
+        </button>
+      
+        {/* Button to control the number of dice */}
+      <button class="btn btn-light mx-2" onClick={incrementNumDice}>
+        Number of Dices: {numDices}
+      </button>
+      {/* Button to roll the dice */}
+      <button class="btn btn-light mx-2" onClick={rollDice}>Roll</button>
+      {/* Button to reset the game */}
+      <button class="btn btn-light mx-2" onClick={resetGame}>Reset</button>
+      {/* Display the dice boxes */}
+      <div class="text-center">{dices}</div>
+      
+    </div>
+  );
+}
+// Render the game component to the element with ID 'dice_game'
+ReactDOM.render(<DiceGame />, document.getElementById('dice_game'));
+  </script>
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+</body>
+
+</html>
